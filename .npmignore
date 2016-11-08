@@ -9,7 +9,7 @@ upload.php
 # typescript
 *.ts
 !*.d.ts
-
+!*.factory.ts
 # git
 .git
 .gitignore
