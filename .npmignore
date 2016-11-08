@@ -9,14 +9,14 @@ upload.php
 # typescript
 *.ts
 !*.d.ts
-!*.factory.ts
+!*.ngfactory.ts
 # git
 .git
 .gitignore
 
 # config
-tsconfig.json
-tsconfig-aot.json
+#tsconfig.json
+#tsconfig-aot.json
 webpack.config.js
 config
 gulpfile.js
