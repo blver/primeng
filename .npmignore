@@ -22,7 +22,7 @@ config
 gulpfile.js
 
 # aot
-aot
+#aot
 
 # misc
 *.log
