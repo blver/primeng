@@ -58,17 +58,17 @@ export class Lightbox implements AfterViewInit,OnDestroy{
     
     public zindex: any;
     
-    public panel: any;
+    protected panel: any;
     
-    public index: number;
+    protected index: number;
     
-    public mask: any;
+    protected mask: any;
     
     public preventDocumentClickListener: boolean;
     
-    public documentClickListener: any;
+    protected documentClickListener: any;
 
-    constructor(public el: ElementRef, public domHandler: DomHandler, public renderer: Renderer) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler, protected renderer: Renderer) {}
                 
     onImageClick(event,image,i,content) {
         this.index = i;

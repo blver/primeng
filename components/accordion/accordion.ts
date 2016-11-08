@@ -2,7 +2,6 @@ import {NgModule,Component,ElementRef,AfterContentInit,Input,Output,EventEmitter
 trigger,state,transition,style,animate} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Header} from '../common/shared';
-import {BlockableUI} from '../common/api';
 
 @Component({
     selector: 'p-accordion',
@@ -12,7 +11,7 @@ import {BlockableUI} from '../common/api';
         </div>
     `,
 })
-export class Accordion implements BlockableUI {
+export class Accordion {
     
     @Input() multiple: boolean;
     
@@ -26,25 +25,22 @@ export class Accordion implements BlockableUI {
     
     public tabs: AccordionTab[] = [];
 
-    constructor(public el: ElementRef) {}
+    constructor(protected el: ElementRef) {}
 
     addTab(tab: AccordionTab) {
         this.tabs.push(tab);
-    }   
-    
-    getBlockableElement(): HTMLElement {
-        return this.el.nativeElement.children[0];
-    } 
+    }    
 }
 
 @Component({
     selector: 'p-accordionTab',
     template: `
-        <div class="ui-accordion-header ui-state-default ui-corner-all" [ngClass]="{'ui-state-active': selected,'ui-state-hover':hover&&!disabled,'ui-state-disabled':disabled}"
-            (mouseenter)="hover = true" (mouseleave)="hover=false" (click)="toggle($event)">
+        <div class="ui-accordion-header ui-state-default ui-corner-all" [ngClass]="{'ui-state-active': selected,'ui-state-hover':hover&&!disabled,'ui-state-disabled':disabled}">
             <span class="fa fa-fw" [ngClass]="{'fa-caret-down': selected, 'fa-caret-right': !selected}"></span>
-            <a href="#" *ngIf="!headerFacet" role="tab" [attr.aria-expanded]="selected" [attr.aria-selected]="selected">{{header}}</a>
-            <a href="#" *ngIf="headerFacet" role="tab" [attr.aria-expanded]="selected" [attr.aria-selected]="selected">
+            <a href="#" *ngIf="!headerFacet" role="tab" [attr.aria-expanded]="selected" [attr.aria-selected]="selected"
+                (click)="toggle($event)" (mouseenter)="hover = true" (mouseleave)="hover=false">{{header}}</a>
+            <a href="#" *ngIf="headerFacet" role="tab" [attr.aria-expanded]="selected" [attr.aria-selected]="selected"
+                (click)="toggle($event)" (mouseenter)="hover = true" (mouseleave)="hover=false">
                 <ng-content select="header"></ng-content>
             </a>
         </div>
@@ -80,11 +76,10 @@ export class AccordionTab {
 
     @ContentChild(Header) headerFacet;
     
-    public animating: boolean;
-    
     public hover: boolean;
+    public animating: boolean;
 
-    constructor(public accordion: Accordion) {
+    constructor(protected accordion: Accordion) {
         this.accordion.addTab(this);
     }
 

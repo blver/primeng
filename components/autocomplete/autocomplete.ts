@@ -16,8 +16,8 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
     selector: 'p-autoComplete',
     template: `
         <span [ngClass]="{'ui-autocomplete ui-widget':true,'ui-autocomplete-dd':dropdown,'ui-autocomplete-multiple':multiple}" [ngStyle]="style" [class]="styleClass">
-            <input *ngIf="!multiple" #in pInputText type="text" [ngStyle]="inputStyle" [class]="inputStyleClass" autocomplete="off"
-            [value]="value ? (field ? resolveFieldData(value)||value : value) : null" (input)="onInput($event)" (keydown)="onKeydown($event)" (focus)="onFocus()" (blur)="onBlur()"
+            <input *ngIf="!multiple" #in pInputText type="text" [ngStyle]="inputStyle" [class]="inputStyleClass" 
+            [value]="value ? (field ? resolveFieldData(value)||value : value) : null" (input)="onInput($event)" (keydown)="onKeydown($event)" (blur)="onModelTouched()"
             [attr.placeholder]="placeholder" [attr.size]="size" [attr.maxlength]="maxlength" [attr.readonly]="readonly" [disabled]="disabled"
             [ngClass]="{'ui-autocomplete-input':true,'ui-autocomplete-dd-input':dropdown}"
             ><ul *ngIf="multiple" class="ui-autocomplete-multiple-container ui-widget ui-inputtext ui-state-default ui-corner-all" (click)="multiIn.focus()">
@@ -26,7 +26,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
                     <span class="ui-autocomplete-token-label">{{field ? val[field] : val}}</span>
                 </li>
                 <li class="ui-autocomplete-input-token">
-                    <input #multiIn type="text" pInputText (input)="onInput($event)" (keydown)="onKeydown($event)" (focus)="onFocus()" (blur)="onBlur()" autocomplete="off">
+                    <input #multiIn type="text" pInputText (input)="onInput($event)" (keydown)="onKeydown($event)" (blur)="onModelTouched()">
                 </li>
             </ul
             ><button type="button" pButton icon="fa-fw fa-caret-down" class="ui-autocomplete-dropdown" [disabled]="disabled"
@@ -42,10 +42,6 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
             </div>
         </span>
     `,
-    host: {
-        '[class.ui-inputwrapper-filled]': 'filled',
-        '[class.ui-inputwrapper-focus]': 'focus'
-    },
     providers: [DomHandler,AUTOCOMPLETE_VALUE_ACCESSOR]
 })
 export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,ControlValueAccessor {
@@ -118,9 +114,7 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
     
     highlightOptionChanged: boolean;
     
-    focus: boolean;
-    
-    constructor(public el: ElementRef, public domHandler: DomHandler, differs: IterableDiffers, public renderer: Renderer) {
+    constructor(protected el: ElementRef, protected domHandler: DomHandler, differs: IterableDiffers, protected renderer: Renderer) {
         this.differ = differs.find([]).create(null);
     }
     
@@ -181,7 +175,7 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
     setDisabledState(val: boolean): void {
         this.disabled = val;
     }
-
+    
     onInput(event) {
         let value = event.target.value;
         if(!this.multiple) {
@@ -364,15 +358,6 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
         }
     }
     
-    onFocus() {
-        this.focus = true;
-    }
-    
-    onBlur() {
-        this.focus = false;
-        this.onModelTouched();
-    }
-    
     isSelected(val: any): boolean {
         let selected: boolean = false;
         if(this.value && this.value.length) {
@@ -398,10 +383,6 @@ export class AutoComplete implements AfterViewInit,DoCheck,AfterViewChecked,Cont
         }
                 
         return index;
-    }
-    
-    get filled(): boolean {
-        return this.input && this.input.value != '';
     }
     
     ngOnDestroy() {

@@ -97,8 +97,8 @@ export class ConfirmDialog implements AfterViewInit,OnDestroy {
     
     subscription: Subscription;
             
-    constructor(public el: ElementRef, public domHandler: DomHandler, 
-            public renderer: Renderer, private confirmationService: ConfirmationService) {
+    constructor(protected el: ElementRef, protected domHandler: DomHandler, 
+            protected renderer: Renderer, private confirmationService: ConfirmationService) {
         this.subscription = confirmationService.requireConfirmation$.subscribe(confirmation => {
             this.confirmation = confirmation;
             this.message = this.confirmation.message||this.message;

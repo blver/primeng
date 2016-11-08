@@ -42,7 +42,7 @@ export class Rating implements ControlValueAccessor {
     
     public starsArray: number[];
     
-    public hoverCancel: boolean;
+    protected hoverCancel: boolean;
 
     ngOnInit() {
         this.starsArray = [];

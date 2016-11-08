@@ -1,20 +1,57 @@
-import { NgModule, Component, ElementRef, Input, forwardRef, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DomHandler } from '../dom/domhandler';
-import { InputTextModule } from '../inputtext/inputtext';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-export var INPUTMASK_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return InputMask; }),
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+/*
+    Port of jQuery MaskedInput by DigitalBush as a Native Angular2 Component in Typescript without jQuery
+    https://github.com/digitalBush/jquery.maskedinput/
+    
+    Copyright (c) 2007-2014 Josh Bush (digitalbush.com)
+
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of this software and associated documentation
+    files (the "Software"), to deal in the Software without
+    restriction, including without limitation the rights to use,
+    copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following
+    conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.
+*/
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var domhandler_1 = require('../dom/domhandler');
+var inputtext_1 = require('../inputtext/inputtext');
+var forms_1 = require('@angular/forms');
+exports.INPUTMASK_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return InputMask; }),
     multi: true
 };
-export var InputMask = (function () {
+var InputMask = (function () {
     function InputMask(el, domHandler) {
         this.el = el;
         this.domHandler = domHandler;
         this.slotChar = '_';
         this.autoClear = true;
-        this.onComplete = new EventEmitter();
+        this.onComplete = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
@@ -115,14 +152,13 @@ export var InputMask = (function () {
             return { begin: begin, end: end };
         }
     };
-    InputMask.prototype.isCompleted = function () {
-        var completed;
+    InputMask.prototype.tryFireCompleted = function () {
         for (var i = this.firstNonMaskPos; i <= this.lastRequiredNonMaskPos; i++) {
             if (this.tests[i] && this.buffer[i] === this.getPlaceholder(i)) {
-                return false;
+                return;
             }
         }
-        return true;
+        this.onComplete.emit();
     };
     InputMask.prototype.getPlaceholder = function (i) {
         if (i < this.slotChar.length) {
@@ -196,12 +232,9 @@ export var InputMask = (function () {
                 pos.begin++;
             this.caret(pos.begin, pos.begin);
         }
-        if (this.isCompleted()) {
-            this.onComplete.emit();
-        }
+        this.tryFireCompleted();
     };
     InputMask.prototype.onBlur = function (e) {
-        this.focus = false;
         this.onModelTouched();
         this.checkVal();
         this.updateModel(e);
@@ -247,7 +280,7 @@ export var InputMask = (function () {
         if (this.readonly) {
             return;
         }
-        var k = e.which || e.keyCode, pos = this.caret(), p, c, next, completed;
+        var k = e.which || e.keyCode, pos = this.caret(), p, c, next;
         if (e.ctrlKey || e.altKey || e.metaKey || k < 32) {
             return;
         }
@@ -275,16 +308,13 @@ export var InputMask = (function () {
                         this.caret(next);
                     }
                     if (pos.begin <= this.lastRequiredNonMaskPos) {
-                        completed = this.isCompleted();
+                        this.tryFireCompleted();
                     }
                 }
             }
             e.preventDefault();
         }
         this.updateModel(e);
-        if (completed) {
-            this.onComplete.emit();
-        }
     };
     InputMask.prototype.clearBuffer = function (start, end) {
         var i;
@@ -353,7 +383,6 @@ export var InputMask = (function () {
         if (this.readonly) {
             return;
         }
-        this.focus = true;
         clearTimeout(this.caretTimeoutId);
         var pos;
         this.focusText = this.input.value;
@@ -378,17 +407,13 @@ export var InputMask = (function () {
             this.handleInputChange(event);
     };
     InputMask.prototype.handleInputChange = function (event) {
-        var _this = this;
         if (this.readonly) {
             return;
         }
         setTimeout(function () {
-            var pos = _this.checkVal(true);
-            _this.caret(pos);
-            _this.updateModel(event);
-            if (_this.isCompleted()) {
-                _this.onComplete.emit();
-            }
+            var pos = this.checkVal(true);
+            this.caret(pos);
+            this.tryFireCompleted();
         }, 0);
     };
     InputMask.prototype.getUnmaskedValue = function () {
@@ -401,64 +426,90 @@ export var InputMask = (function () {
         }
         return unmaskedBuffer.join('');
     };
-    Object.defineProperty(InputMask.prototype, "filled", {
-        get: function () {
-            return this.input && this.input.value != '';
-        },
-        enumerable: true,
-        configurable: true
-    });
     InputMask.prototype.updateModel = function (e) {
         this.onModelChange(this.unmask ? this.getUnmaskedValue() : e.target.value);
     };
     InputMask.prototype.ngOnDestroy = function () {
     };
-    InputMask.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-inputMask',
-                    template: "<input pInputText type=\"text\" [name]=\"name\" [value]=\"value||''\" [ngStyle]=\"style\" [ngClass]=\"styleClass\" [placeholder]=\"placeholder\"\n        [attr.size]=\"size\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [disabled]=\"disabled\" [readonly]=\"readonly\"\n        (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\" (keydown)=\"onKeyDown($event)\" (keypress)=\"onKeyPress($event)\"\n        (input)=\"onInput($event)\" (paste)=\"handleInputChange($event)\">",
-                    host: {
-                        '[class.ui-inputwrapper-filled]': 'filled',
-                        '[class.ui-inputwrapper-focus]': 'focus'
-                    },
-                    providers: [INPUTMASK_VALUE_ACCESSOR, DomHandler]
-                },] },
-    ];
-    /** @nocollapse */
-    InputMask.ctorParameters = [
-        { type: ElementRef, },
-        { type: DomHandler, },
-    ];
-    InputMask.propDecorators = {
-        'mask': [{ type: Input },],
-        'slotChar': [{ type: Input },],
-        'autoClear': [{ type: Input },],
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-        'placeholder': [{ type: Input },],
-        'size': [{ type: Input },],
-        'maxlength': [{ type: Input },],
-        'tabindex': [{ type: Input },],
-        'disabled': [{ type: Input },],
-        'readonly': [{ type: Input },],
-        'unmask': [{ type: Input },],
-        'name': [{ type: Input },],
-        'onComplete': [{ type: Output },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], InputMask.prototype, "mask", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], InputMask.prototype, "slotChar", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], InputMask.prototype, "autoClear", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], InputMask.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], InputMask.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], InputMask.prototype, "placeholder", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], InputMask.prototype, "size", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], InputMask.prototype, "maxlength", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], InputMask.prototype, "tabindex", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], InputMask.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], InputMask.prototype, "readonly", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], InputMask.prototype, "unmask", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], InputMask.prototype, "name", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], InputMask.prototype, "onComplete", void 0);
+    InputMask = __decorate([
+        core_1.Component({
+            selector: 'p-inputMask',
+            template: "<input pInputText type=\"text\" [name]=\"name\" [value]=\"value||''\" [ngStyle]=\"style\" [ngClass]=\"styleClass\" [placeholder]=\"placeholder\"\n        [attr.size]=\"size\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [disabled]=\"disabled\" [readonly]=\"readonly\"\n        (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\" (keydown)=\"onKeyDown($event)\" (keypress)=\"onKeyPress($event)\"\n        (input)=\"onInput($event)\" (paste)=\"handleInputChange($event)\">",
+            providers: [exports.INPUTMASK_VALUE_ACCESSOR, domhandler_1.DomHandler]
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, domhandler_1.DomHandler])
+    ], InputMask);
     return InputMask;
 }());
-export var InputMaskModule = (function () {
+exports.InputMask = InputMask;
+var InputMaskModule = (function () {
     function InputMaskModule() {
     }
-    InputMaskModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule, InputTextModule],
-                    exports: [InputMask],
-                    declarations: [InputMask]
-                },] },
-    ];
-    /** @nocollapse */
-    InputMaskModule.ctorParameters = [];
+    InputMaskModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule, inputtext_1.InputTextModule],
+            exports: [InputMask],
+            declarations: [InputMask]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], InputMaskModule);
     return InputMaskModule;
 }());
+exports.InputMaskModule = InputMaskModule;
 //# sourceMappingURL=inputmask.js.map

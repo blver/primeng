@@ -82,15 +82,15 @@ export class FileUpload implements OnInit,AfterContentInit {
     
     @ContentChildren(PrimeTemplate) templates: QueryList<any>;
      
-    public files: File[];
+    protected files: File[];
     
-    public progress: number = 0;
+    protected progress: number = 0;
     
     public dragHighlight: boolean;
     
     public msgs: Message[];
     
-    public fileTemplate: TemplateRef<any>;
+    protected fileTemplate: TemplateRef<any>;
     
     public contentTemplate: TemplateRef<any>; 
         

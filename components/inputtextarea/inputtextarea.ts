@@ -10,8 +10,7 @@ import {CommonModule} from '@angular/common';
         '[class.ui-widget]': 'true',
         '[class.ui-state-hover]': 'hover',
         '[class.ui-state-focus]': 'focus',
-        '[class.ui-state-disabled]': 'disabled',
-        '[class.ui-state-filled]': 'filled',
+        '[class.ui-state-disabled]': 'isDisabled()',
         '[attr.rows]': 'rows',
         '[attr.cols]': 'cols'
     }
@@ -32,7 +31,7 @@ export class InputTextarea implements OnInit {
     
     colsDefault: number;
         
-    constructor(public el: ElementRef) {}
+    constructor(protected el: ElementRef) {}
     
     ngOnInit() {
         this.rowsDefault = this.rows;
@@ -67,6 +66,10 @@ export class InputTextarea implements OnInit {
         }
     }
     
+    isDisabled() {
+        return this.el.nativeElement.disabled;
+    }
+    
     @HostListener('keyup', ['$event']) 
     onKeyup(e) {
         if(this.autoResize) {
@@ -83,14 +86,6 @@ export class InputTextarea implements OnInit {
         }
 
         this.rows = (linesCount >= this.rowsDefault) ? (linesCount + 1) : this.rowsDefault;
-    }
-    
-    get disabled(): boolean {
-        return this.el.nativeElement.disabled;
-    }
-    
-    get filled(): boolean {
-        return this.el.nativeElement.value != '';
     }
 }
 

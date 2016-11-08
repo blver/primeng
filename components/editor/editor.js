@@ -1,19 +1,29 @@
-import { NgModule, Component, ElementRef, Input, Output, EventEmitter, ContentChild, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Header } from '../common/shared';
-import { DomHandler } from '../dom/domhandler';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-export var EDITOR_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return Editor; }),
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var shared_1 = require('../common/shared');
+var domhandler_1 = require('../dom/domhandler');
+var forms_1 = require('@angular/forms');
+exports.EDITOR_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return Editor; }),
     multi: true
 };
-export var Editor = (function () {
+var Editor = (function () {
     function Editor(el, domHandler) {
         this.el = el;
         this.domHandler = domHandler;
-        this.onTextChange = new EventEmitter();
-        this.onSelectionChange = new EventEmitter();
+        this.onTextChange = new core_1.EventEmitter();
+        this.onSelectionChange = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
@@ -70,42 +80,61 @@ export var Editor = (function () {
     Editor.prototype.registerOnTouched = function (fn) {
         this.onModelTouched = fn;
     };
-    Editor.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-editor',
-                    template: "\n        <div [ngClass]=\"'ui-widget ui-editor-container ui-corner-all'\" [class]=\"styleClass\">\n            <div class=\"ui-editor-toolbar ui-widget-header ui-corner-top\" *ngIf=\"toolbar\">\n                <ng-content select=\"header\"></ng-content>\n            </div>\n            <div class=\"ui-editor-toolbar ui-widget-header ui-corner-top\" *ngIf=\"!toolbar\">\n                <span class=\"ql-formats\">\n                    <select class=\"ql-header\">\n                      <option value=\"1\">Heading</option>\n                      <option value=\"2\">Subheading</option>\n                      <option selected>Normal</option>\n                    </select>\n                    <select class=\"ql-font\">\n                      <option selected>Sans Serif</option>\n                      <option value=\"serif\">Serif</option>\n                      <option value=\"monospace\">Monospace</option>\n                    </select>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-bold\"></button>\n                    <button class=\"ql-italic\"></button>\n                    <button class=\"ql-underline\"></button>\n                </span>\n                <span class=\"ql-formats\">\n                    <select class=\"ql-color\"></select>\n                    <select class=\"ql-background\"></select>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-list\" value=\"ordered\"></button>\n                    <button class=\"ql-list\" value=\"bullet\"></button>\n                    <select class=\"ql-align\">\n                        <option selected></option>\n                        <option value=\"center\"></option>\n                        <option value=\"right\"></option>\n                        <option value=\"justify\"></option>\n                    </select>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-link\"></button>\n                    <button class=\"ql-image\"></button>\n                    <button class=\"ql-code-block\"></button>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-clean\"></button>\n                </span>\n            </div>\n            <div class=\"ui-editor-content\" [ngStyle]=\"style\"></div>\n        </div>\n    ",
-                    providers: [DomHandler, EDITOR_VALUE_ACCESSOR]
-                },] },
-    ];
-    /** @nocollapse */
-    Editor.ctorParameters = [
-        { type: ElementRef, },
-        { type: DomHandler, },
-    ];
-    Editor.propDecorators = {
-        'onTextChange': [{ type: Output },],
-        'onSelectionChange': [{ type: Output },],
-        'toolbar': [{ type: ContentChild, args: [Header,] },],
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-        'placeholder': [{ type: Input },],
-        'readOnly': [{ type: Input },],
-        'formats': [{ type: Input },],
-    };
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], Editor.prototype, "onTextChange", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], Editor.prototype, "onSelectionChange", void 0);
+    __decorate([
+        core_1.ContentChild(shared_1.Header), 
+        __metadata('design:type', Object)
+    ], Editor.prototype, "toolbar", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], Editor.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], Editor.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], Editor.prototype, "placeholder", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], Editor.prototype, "readOnly", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Array)
+    ], Editor.prototype, "formats", void 0);
+    Editor = __decorate([
+        core_1.Component({
+            selector: 'p-editor',
+            template: "\n        <div [ngClass]=\"'ui-widget ui-editor-container ui-corner-all'\" [class]=\"styleClass\">\n            <div class=\"ui-editor-toolbar ui-widget-header ui-corner-top\" *ngIf=\"toolbar\">\n                <ng-content select=\"header\"></ng-content>\n            </div>\n            <div class=\"ui-editor-toolbar ui-widget-header ui-corner-top\" *ngIf=\"!toolbar\">\n                <span class=\"ql-formats\">\n                    <select class=\"ql-header\">\n                      <option value=\"1\">Heading</option>\n                      <option value=\"2\">Subheading</option>\n                      <option selected>Normal</option>\n                    </select>\n                    <select class=\"ql-font\">\n                      <option selected>Sans Serif</option>\n                      <option value=\"serif\">Serif</option>\n                      <option value=\"monospace\">Monospace</option>\n                    </select>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-bold\"></button>\n                    <button class=\"ql-italic\"></button>\n                    <button class=\"ql-underline\"></button>\n                </span>\n                <span class=\"ql-formats\">\n                    <select class=\"ql-color\"></select>\n                    <select class=\"ql-background\"></select>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-list\" value=\"ordered\"></button>\n                    <button class=\"ql-list\" value=\"bullet\"></button>\n                    <select class=\"ql-align\">\n                        <option selected></option>\n                        <option value=\"center\"></option>\n                        <option value=\"right\"></option>\n                        <option value=\"justify\"></option>\n                    </select>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-link\"></button>\n                    <button class=\"ql-image\"></button>\n                    <button class=\"ql-code-block\"></button>\n                </span>\n                <span class=\"ql-formats\">\n                    <button class=\"ql-clean\"></button>\n                </span>\n            </div>\n            <div class=\"ui-editor-content\" [ngStyle]=\"style\"></div>\n        </div>\n    ",
+            providers: [domhandler_1.DomHandler, exports.EDITOR_VALUE_ACCESSOR]
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, domhandler_1.DomHandler])
+    ], Editor);
     return Editor;
 }());
-export var EditorModule = (function () {
+exports.Editor = Editor;
+var EditorModule = (function () {
     function EditorModule() {
     }
-    EditorModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [Editor],
-                    declarations: [Editor]
-                },] },
-    ];
-    /** @nocollapse */
-    EditorModule.ctorParameters = [];
+    EditorModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [Editor],
+            declarations: [Editor]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], EditorModule);
     return EditorModule;
 }());
+exports.EditorModule = EditorModule;
 //# sourceMappingURL=editor.js.map

@@ -17,7 +17,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
         <div [ngClass]="{'ui-multiselect ui-widget ui-state-default ui-corner-all':true,'ui-state-focus': focus,'ui-state-disabled': disabled}" [ngStyle]="style" [class]="styleClass"
             (mouseenter)="onMouseenter($event)" (mouseleave)="onMouseleave($event)" (click)="onMouseclick($event,in)">
             <div class="ui-helper-hidden-accessible">
-                <input #in type="text" readonly="readonly" (focus)="onFocus($event)" (blur)="onBlur($event)" [disabled]="disabled">
+                <input #in type="text" readonly="readonly" (focus)="onFocus($event)" (blur)="onBlur($event)">
             </div>
             <div class="ui-multiselect-label-container" [title]="valuesAsString">
                 <label [ngClass]="{'ui-multiselect-label ui-corner-all':true,'ui-state-hover':hover,'ui-state-focus':focus}">{{valuesAsString}}</label>
@@ -85,11 +85,11 @@ export class MultiSelect implements OnInit,AfterViewInit,AfterViewChecked,DoChec
     
     @Input() overlayVisible: boolean;
     
-    public value: any[];
+    value: any[];
     
-    public onModelChange: Function = () => {};
+    onModelChange: Function = () => {};
     
-    public onModelTouched: Function = () => {};
+    onModelTouched: Function = () => {};
     
     public valuesAsString: string;
     
@@ -97,27 +97,27 @@ export class MultiSelect implements OnInit,AfterViewInit,AfterViewChecked,DoChec
     
     public focus: boolean;
     
-    public documentClickListener: any;
+    protected documentClickListener: any;
     
-    public panel: any;
+    protected panel: any;
     
-    public container: any;
+    protected container: any;
     
-    public selfClick: boolean;
+    protected selfClick: boolean;
     
     public panelClick: boolean;
     
-    public filterValue: string;
+    protected filterValue: string;
     
-    public visibleOptions: SelectItem[];
+    protected visibleOptions: SelectItem[];
     
-    public filtered: boolean;
+    protected filtered: boolean;
+
+    public hoverToggleAll:boolean;
     
-    public hoverToggleAll: boolean;
+    differ: any;
     
-    public differ: any;
-    
-    constructor(public el: ElementRef, public domHandler: DomHandler, public renderer: Renderer, differs: IterableDiffers) {
+    constructor(protected el: ElementRef, protected domHandler: DomHandler, protected renderer: Renderer, differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
     }
     

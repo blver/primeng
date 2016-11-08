@@ -38,11 +38,11 @@ export class RadioButton implements ControlValueAccessor {
 
     @Output() onClick: EventEmitter<any> = new EventEmitter();
     
-    public model: any;
+    protected model: any;
     
-    public onModelChange: Function = () => {};
+    protected onModelChange: Function = () => {};
     
-    public onModelTouched: Function = () => {};
+    protected onModelTouched: Function = () => {};
     
     public checked: boolean;
     
@@ -58,10 +58,8 @@ export class RadioButton implements ControlValueAccessor {
     }
     
     select() {
-        if(!this.disabled) {
-            this.checked = true;
-            this.onModelChange(this.value);
-        }
+        this.checked = true;
+        this.onModelChange(this.value);
     }
             
     writeValue(model: any) : void {

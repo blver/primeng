@@ -1,9 +1,19 @@
-import { NgModule, Component, ElementRef, Input, Renderer, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DomHandler } from '../dom/domhandler';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-export var TieredMenuSub = (function () {
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var domhandler_1 = require('../dom/domhandler');
+var common_2 = require('@angular/common');
+var router_1 = require('@angular/router');
+var TieredMenuSub = (function () {
     function TieredMenuSub(domHandler, router, location) {
         this.domHandler = domHandler;
         this.router = router;
@@ -18,12 +28,12 @@ export var TieredMenuSub = (function () {
         var nextElement = item.children[0].nextElementSibling;
         if (nextElement) {
             var sublist = nextElement.children[0];
-            sublist.style.zIndex = String(++DomHandler.zindex);
+            sublist.style.zIndex = ++domhandler_1.DomHandler.zindex;
             sublist.style.top = '0px';
             sublist.style.left = this.domHandler.getOuterWidth(item.children[0]) + 'px';
         }
     };
-    TieredMenuSub.prototype.onItemMouseLeave = function (event) {
+    TieredMenuSub.prototype.onItemMouseLeave = function (event, link) {
         this.activeItem = null;
         this.activeLink = null;
     };
@@ -37,7 +47,7 @@ export var TieredMenuSub = (function () {
         }
         if (item.command) {
             if (!item.eventEmitter) {
-                item.eventEmitter = new EventEmitter();
+                item.eventEmitter = new core_1.EventEmitter();
                 item.eventEmitter.subscribe(item.command);
             }
             item.eventEmitter.emit({
@@ -53,26 +63,26 @@ export var TieredMenuSub = (function () {
         this.activeItem = null;
         this.activeLink = null;
     };
-    TieredMenuSub.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-tieredMenuSub',
-                    template: "\n        <ul [ngClass]=\"{'ui-helper-reset':root, 'ui-widget-content ui-corner-all ui-helper-clearfix ui-menu-child ui-shadow':!root}\" class=\"ui-menu-list\"\n            (click)=\"listClick($event)\">\n            <template ngFor let-child [ngForOf]=\"(root ? item : item.items)\">\n                <li #item [ngClass]=\"{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':child.items,'ui-menuitem-active':item==activeItem}\"\n                    (mouseenter)=\"onItemMouseEnter($event, item, child)\" (mouseleave)=\"onItemMouseLeave($event)\">\n                    <a #link [href]=\"child.url||'#'\" class=\"ui-menuitem-link ui-corner-all\" \n                        [ngClass]=\"{'ui-state-hover':link==activeLink&&!child.disabled,'ui-state-disabled':child.disabled}\" (click)=\"itemClick($event, child)\">\n                        <span class=\"ui-submenu-icon fa fa-fw fa-caret-right\" *ngIf=\"child.items\"></span>\n                        <span class=\"ui-menuitem-icon fa fa-fw\" *ngIf=\"child.icon\" [ngClass]=\"child.icon\"></span>\n                        <span class=\"ui-menuitem-text\">{{child.label}}</span>\n                    </a>\n                    <p-tieredMenuSub class=\"ui-submenu\" [item]=\"child\" *ngIf=\"child.items\"></p-tieredMenuSub>\n                </li>\n            </template>\n        </ul>\n    ",
-                    providers: [DomHandler]
-                },] },
-    ];
-    /** @nocollapse */
-    TieredMenuSub.ctorParameters = [
-        { type: DomHandler, },
-        { type: Router, },
-        { type: Location, },
-    ];
-    TieredMenuSub.propDecorators = {
-        'item': [{ type: Input },],
-        'root': [{ type: Input },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], TieredMenuSub.prototype, "item", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], TieredMenuSub.prototype, "root", void 0);
+    TieredMenuSub = __decorate([
+        core_1.Component({
+            selector: 'p-tieredMenuSub',
+            template: "\n        <ul [ngClass]=\"{'ui-helper-reset':root, 'ui-widget-content ui-corner-all ui-helper-clearfix ui-menu-child ui-shadow':!root}\" class=\"ui-menu-list\"\n            (click)=\"listClick($event)\">\n            <template ngFor let-child [ngForOf]=\"(root ? item : item.items)\">\n                <li #item [ngClass]=\"{'ui-menuitem ui-widget ui-corner-all':true,'ui-menu-parent':child.items,'ui-menuitem-active':item==activeItem}\"\n                    (mouseenter)=\"onItemMouseEnter($event, item, child)\" (mouseleave)=\"onItemMouseLeave($event, item)\">\n                    <a #link [href]=\"child.url||'#'\" class=\"ui-menuitem-link ui-corner-all\" \n                        [ngClass]=\"{'ui-state-hover':link==activeLink&&!child.disabled,'ui-state-disabled':child.disabled}\" (click)=\"itemClick($event, child)\">\n                        <span class=\"ui-submenu-icon fa fa-fw fa-caret-right\" *ngIf=\"child.items\"></span>\n                        <span class=\"ui-menuitem-icon fa fa-fw\" *ngIf=\"child.icon\" [ngClass]=\"child.icon\"></span>\n                        <span class=\"ui-menuitem-text\">{{child.label}}</span>\n                    </a>\n                    <p-tieredMenuSub class=\"ui-submenu\" [item]=\"child\" *ngIf=\"child.items\"></p-tieredMenuSub>\n                </li>\n            </template>\n        </ul>\n    ",
+            providers: [domhandler_1.DomHandler]
+        }), 
+        __metadata('design:paramtypes', [domhandler_1.DomHandler, router_1.Router, common_2.Location])
+    ], TieredMenuSub);
     return TieredMenuSub;
 }());
-export var TieredMenu = (function () {
+exports.TieredMenuSub = TieredMenuSub;
+var TieredMenu = (function () {
     function TieredMenu(el, domHandler, renderer) {
         this.el = el;
         this.domHandler = domHandler;
@@ -127,39 +137,45 @@ export var TieredMenu = (function () {
             }
         }
     };
-    TieredMenu.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-tieredMenu',
-                    template: "\n        <div [ngClass]=\"{'ui-tieredmenu ui-menu ui-widget ui-widget-content ui-corner-all ui-helper-clearfix':true,'ui-menu-dynamic ui-shadow':popup}\" \n            [class]=\"styleClass\" [ngStyle]=\"style\">\n            <p-tieredMenuSub [item]=\"model\" root=\"root\"></p-tieredMenuSub>\n        </div>\n    ",
-                    providers: [DomHandler]
-                },] },
-    ];
-    /** @nocollapse */
-    TieredMenu.ctorParameters = [
-        { type: ElementRef, },
-        { type: DomHandler, },
-        { type: Renderer, },
-    ];
-    TieredMenu.propDecorators = {
-        'model': [{ type: Input },],
-        'popup': [{ type: Input },],
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Array)
+    ], TieredMenu.prototype, "model", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], TieredMenu.prototype, "popup", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], TieredMenu.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], TieredMenu.prototype, "styleClass", void 0);
+    TieredMenu = __decorate([
+        core_1.Component({
+            selector: 'p-tieredMenu',
+            template: "\n        <div [ngClass]=\"{'ui-tieredmenu ui-menu ui-widget ui-widget-content ui-corner-all ui-helper-clearfix':true,'ui-menu-dynamic ui-shadow':popup}\" \n            [class]=\"styleClass\" [ngStyle]=\"style\">\n            <p-tieredMenuSub [item]=\"model\" root=\"root\"></p-tieredMenuSub>\n        </div>\n    ",
+            providers: [domhandler_1.DomHandler]
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, domhandler_1.DomHandler, core_1.Renderer])
+    ], TieredMenu);
     return TieredMenu;
 }());
-export var TieredMenuModule = (function () {
+exports.TieredMenu = TieredMenu;
+var TieredMenuModule = (function () {
     function TieredMenuModule() {
     }
-    TieredMenuModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [TieredMenu],
-                    declarations: [TieredMenu, TieredMenuSub]
-                },] },
-    ];
-    /** @nocollapse */
-    TieredMenuModule.ctorParameters = [];
+    TieredMenuModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [TieredMenu],
+            declarations: [TieredMenu, TieredMenuSub]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], TieredMenuModule);
     return TieredMenuModule;
 }());
+exports.TieredMenuModule = TieredMenuModule;
 //# sourceMappingURL=tieredmenu.js.map

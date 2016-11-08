@@ -17,7 +17,7 @@ import {DomHandler} from '../dom/domhandler';
             </div>
             <div>
                 <span class="ui-terminal-content-prompt">{{prompt}}</span>
-                <input #in type="text" [(ngModel)]="command" class="ui-terminal-input" autocomplete="off" (keydown)="handleCommand($event)" autofocus>
+                <input #in type="text" [(ngModel)]="command" class="ui-terminal-input" autocomplete="off" (keydown)="handleCommand($event,container)" autofocus>
             </div>
         </div>
     `,
@@ -41,11 +41,11 @@ export class Terminal implements AfterViewInit,AfterViewChecked {
     
     command: string;
     
-    container: Element;
+    container: any;
     
     commandProcessed: boolean;
     
-    constructor(public el: ElementRef, public domHandler: DomHandler) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler) {}
     
     ngAfterViewInit() {
         this.container = this.domHandler.find(this.el.nativeElement, '.ui-terminal')[0];
@@ -66,7 +66,7 @@ export class Terminal implements AfterViewInit,AfterViewChecked {
         }
     }
     
-    handleCommand(event: KeyboardEvent) {
+    handleCommand(event,container) {
         if(event.keyCode == 13) {
             this.commands.push({text: this.command});                    
             this.handler.emit({originalEvent: event, command: this.command});
@@ -74,7 +74,7 @@ export class Terminal implements AfterViewInit,AfterViewChecked {
         }
     }
     
-    focus(element: HTMLElement) {
+    focus(element) {
         element.focus();
     }
     

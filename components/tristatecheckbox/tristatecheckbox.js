@@ -1,14 +1,24 @@
-import { NgModule, Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-export var TRISTATECHECKBOX_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return TriStateCheckbox; }),
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var forms_1 = require('@angular/forms');
+exports.TRISTATECHECKBOX_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return TriStateCheckbox; }),
     multi: true
 };
-export var TriStateCheckbox = (function () {
+var TriStateCheckbox = (function () {
     function TriStateCheckbox() {
-        this.onChange = new EventEmitter();
+        this.onChange = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
@@ -31,7 +41,7 @@ export var TriStateCheckbox = (function () {
         }
     };
     TriStateCheckbox.prototype.toggle = function (event) {
-        if (this.value == null || this.value == undefined)
+        if (this.value == null)
             this.value = true;
         else if (this.value == true)
             this.value = false;
@@ -57,39 +67,46 @@ export var TriStateCheckbox = (function () {
         this.onModelTouched = fn;
     };
     TriStateCheckbox.prototype.writeValue = function (value) {
-        this.value = value;
+        this.value = value || null;
     };
     TriStateCheckbox.prototype.setDisabledState = function (disabled) {
         this.disabled = disabled;
     };
-    TriStateCheckbox.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-triStateCheckbox',
-                    template: "\n        <div class=\"ui-chkbox ui-tristatechkbox ui-widget\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #input type=\"text\" [name]=\"name\" readonly [disabled]=\"disabled\" (keyup)=\"onKeyup($event)\" (keydown)=\"onKeydown($event)\" (focus)=\"onFocus()\" (blur)=\"onBlur()\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,input)\"\n                [ngClass]=\"{'ui-state-hover':hover&&!disabled,'ui-state-active':value!=null,'ui-state-disabled':disabled,'ui-state-focus':focus}\" \n                    (mouseenter)=\"hover=true\" (mouseleave)=\"hover=false\">\n                <span class=\"ui-chkbox-icon fa fa-fw ui-c\" [ngClass]=\"{'fa-check':value==true,'fa-close':value==false}\"></span>\n            </div>\n        </div>\n    ",
-                    providers: [TRISTATECHECKBOX_VALUE_ACCESSOR]
-                },] },
-    ];
-    /** @nocollapse */
-    TriStateCheckbox.ctorParameters = [];
-    TriStateCheckbox.propDecorators = {
-        'disabled': [{ type: Input },],
-        'name': [{ type: Input },],
-        'onChange': [{ type: Output },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], TriStateCheckbox.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], TriStateCheckbox.prototype, "name", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], TriStateCheckbox.prototype, "onChange", void 0);
+    TriStateCheckbox = __decorate([
+        core_1.Component({
+            selector: 'p-triStateCheckbox',
+            template: "\n        <div class=\"ui-chkbox ui-tristatechkbox ui-widget\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #input type=\"text\" [name]=\"name\" readonly [disabled]=\"disabled\" (keyup)=\"onKeyup($event)\" (keydown)=\"onKeydown($event)\" (focus)=\"onFocus()\" (blur)=\"onBlur()\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,input)\"\n                [ngClass]=\"{'ui-state-hover':hover&&!disabled,'ui-state-active':value!=null,'ui-state-disabled':disabled,'ui-state-focus':focus}\" \n                    (mouseenter)=\"hover=true\" (mouseleave)=\"hover=false\">\n                <span class=\"ui-chkbox-icon fa fa-fw ui-c\" [ngClass]=\"{'fa-check':value==true,'fa-close':value==false}\"></span>\n            </div>\n        </div>\n    ",
+            providers: [exports.TRISTATECHECKBOX_VALUE_ACCESSOR]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], TriStateCheckbox);
     return TriStateCheckbox;
 }());
-export var TriStateCheckboxModule = (function () {
+exports.TriStateCheckbox = TriStateCheckbox;
+var TriStateCheckboxModule = (function () {
     function TriStateCheckboxModule() {
     }
-    TriStateCheckboxModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [TriStateCheckbox],
-                    declarations: [TriStateCheckbox]
-                },] },
-    ];
-    /** @nocollapse */
-    TriStateCheckboxModule.ctorParameters = [];
+    TriStateCheckboxModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [TriStateCheckbox],
+            declarations: [TriStateCheckbox]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], TriStateCheckboxModule);
     return TriStateCheckboxModule;
 }());
+exports.TriStateCheckboxModule = TriStateCheckboxModule;
 //# sourceMappingURL=tristatecheckbox.js.map

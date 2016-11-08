@@ -1,7 +1,17 @@
-import { NgModule, Directive, ElementRef, HostListener, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DomHandler } from '../dom/domhandler';
-export var Tooltip = (function () {
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var domhandler_1 = require('../dom/domhandler');
+var Tooltip = (function () {
     function Tooltip(el, domHandler) {
         this.el = el;
         this.domHandler = domHandler;
@@ -57,7 +67,7 @@ export var Tooltip = (function () {
         this.container.style.left = left + 'px';
         this.container.style.top = top + 'px';
         this.domHandler.fadeIn(this.container, 250);
-        this.container.style.zIndex = ++DomHandler.zindex;
+        this.container.style.zIndex = ++domhandler_1.DomHandler.zindex;
     };
     Tooltip.prototype.hide = function () {
         this.container.style.display = 'none';
@@ -82,41 +92,65 @@ export var Tooltip = (function () {
         }
         this.container = null;
     };
-    Tooltip.decorators = [
-        { type: Directive, args: [{
-                    selector: '[pTooltip]',
-                    host: {},
-                    providers: [DomHandler]
-                },] },
-    ];
-    /** @nocollapse */
-    Tooltip.ctorParameters = [
-        { type: ElementRef, },
-        { type: DomHandler, },
-    ];
-    Tooltip.propDecorators = {
-        'text': [{ type: Input, args: ['pTooltip',] },],
-        'tooltipPosition': [{ type: Input },],
-        'tooltipEvent': [{ type: Input },],
-        'onMouseEnter': [{ type: HostListener, args: ['mouseenter', ['$event'],] },],
-        'onMouseLeave': [{ type: HostListener, args: ['mouseleave', ['$event'],] },],
-        'onFocus': [{ type: HostListener, args: ['focus', ['$event'],] },],
-        'onBlur': [{ type: HostListener, args: ['blur', ['$event'],] },],
-    };
+    __decorate([
+        core_1.Input('pTooltip'), 
+        __metadata('design:type', String)
+    ], Tooltip.prototype, "text", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], Tooltip.prototype, "tooltipPosition", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], Tooltip.prototype, "tooltipEvent", void 0);
+    __decorate([
+        core_1.HostListener('mouseenter', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], Tooltip.prototype, "onMouseEnter", null);
+    __decorate([
+        core_1.HostListener('mouseleave', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], Tooltip.prototype, "onMouseLeave", null);
+    __decorate([
+        core_1.HostListener('focus', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], Tooltip.prototype, "onFocus", null);
+    __decorate([
+        core_1.HostListener('blur', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], Tooltip.prototype, "onBlur", null);
+    Tooltip = __decorate([
+        core_1.Directive({
+            selector: '[pTooltip]',
+            host: {},
+            providers: [domhandler_1.DomHandler]
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, domhandler_1.DomHandler])
+    ], Tooltip);
     return Tooltip;
 }());
-export var TooltipModule = (function () {
+exports.Tooltip = Tooltip;
+var TooltipModule = (function () {
     function TooltipModule() {
     }
-    TooltipModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [Tooltip],
-                    declarations: [Tooltip]
-                },] },
-    ];
-    /** @nocollapse */
-    TooltipModule.ctorParameters = [];
+    TooltipModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [Tooltip],
+            declarations: [Tooltip]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], TooltipModule);
     return TooltipModule;
 }());
+exports.TooltipModule = TooltipModule;
 //# sourceMappingURL=tooltip.js.map

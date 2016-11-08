@@ -1,13 +1,23 @@
-import { NgModule, Component, ElementRef, Input, Output, EventEmitter, forwardRef, Renderer } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DomHandler } from '../dom/domhandler';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-export var SLIDER_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return Slider; }),
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var domhandler_1 = require('../dom/domhandler');
+var forms_1 = require('@angular/forms');
+exports.SLIDER_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return Slider; }),
     multi: true
 };
-export var Slider = (function () {
+var Slider = (function () {
     function Slider(el, domHandler, renderer) {
         this.el = el;
         this.domHandler = domHandler;
@@ -15,25 +25,19 @@ export var Slider = (function () {
         this.min = 0;
         this.max = 100;
         this.orientation = 'horizontal';
-        this.onChange = new EventEmitter();
-        this.onSlideEnd = new EventEmitter();
+        this.onChange = new core_1.EventEmitter();
+        this.onSlideEnd = new core_1.EventEmitter();
         this.handleValues = [];
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
     Slider.prototype.onMouseDown = function (event, index) {
-        if (this.disabled) {
-            return;
-        }
         this.dragging = true;
         this.updateDomData();
         this.sliderHandleClick = true;
         this.handleIndex = index;
     };
     Slider.prototype.onBarClick = function (event) {
-        if (this.disabled) {
-            return;
-        }
         if (!this.sliderHandleClick) {
             this.updateDomData();
             this.handleChange(event);
@@ -42,9 +46,6 @@ export var Slider = (function () {
     };
     Slider.prototype.ngAfterViewInit = function () {
         var _this = this;
-        if (this.disabled) {
-            return;
-        }
         this.dragListener = this.renderer.listenGlobal('body', 'mousemove', function (event) {
             if (_this.dragging) {
                 _this.handleChange(event);
@@ -123,16 +124,11 @@ export var Slider = (function () {
     };
     Slider.prototype.updateHandleValue = function () {
         if (this.range) {
-            this.handleValues[0] = (this.values[0] < this.min ? this.min : this.values[0]) * 100 / (this.max - this.min);
-            this.handleValues[1] = (this.values[1] > this.max ? this.max : this.values[1]) * 100 / (this.max - this.min);
+            this.handleValues[0] = this.values[0] * 100 / (this.max - this.min);
+            this.handleValues[1] = this.values[1] * 100 / (this.max - this.min);
         }
         else {
-            if (this.value < this.min)
-                this.handleValue = this.min;
-            else if (this.value > this.max)
-                this.handleValue = this.max;
-            else
-                this.handleValue = this.value * 100 / (this.max - this.min);
+            this.handleValue = this.value * 100 / (this.max - this.min);
         }
     };
     Slider.prototype.updateValue = function (val, event) {
@@ -180,53 +176,75 @@ export var Slider = (function () {
         return (this.max - this.min) * (handleValue / 100);
     };
     Slider.prototype.ngOnDestroy = function () {
-        if (this.dragListener) {
-            this.dragListener();
-        }
-        if (this.mouseupListener) {
-            this.mouseupListener();
-        }
+        this.dragListener();
     };
-    Slider.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-slider',
-                    template: "\n        <div [ngStyle]=\"style\" [class]=\"styleClass\" [ngClass]=\"{'ui-slider ui-widget ui-widget-content ui-corner-all':true,'ui-state-disabled':disabled,\n            'ui-slider-horizontal':orientation == 'horizontal','ui-slider-vertical':orientation == 'vertical','ui-slider-animate':animate}\"\n            (click)=\"onBarClick($event)\">\n            <span *ngIf=\"!range\" class=\"ui-slider-handle ui-state-default ui-corner-all\" (mousedown)=\"onMouseDown($event)\" [style.transition]=\"dragging ? 'none': null\"\n                [ngStyle]=\"{'left': orientation == 'horizontal' ? handleValue + '%' : null,'bottom': orientation == 'vertical' ? handleValue + '%' : null}\"></span>\n            <span *ngIf=\"range\" class=\"ui-slider-range ui-widget-header ui-corner-all\" [ngStyle]=\"{'left':handleValues[0] + '%',width: (handleValues[1] - handleValues[0] + '%')}\"></span>\n            <span *ngIf=\"orientation=='vertical'\" class=\"ui-slider-range ui-slider-range-min ui-widget-header ui-corner-all\" [ngStyle]=\"{'height': handleValue + '%'}\"></span>\n            <span *ngIf=\"range\" (mousedown)=\"onMouseDown($event,0)\" [style.transition]=\"dragging ? 'none': null\" class=\"ui-slider-handle ui-state-default ui-corner-all\" [ngStyle]=\"{'left':handleValues[0] + '%'}\"></span>\n            <span *ngIf=\"range\" (mousedown)=\"onMouseDown($event,1)\" [style.transition]=\"dragging ? 'none': null\" class=\"ui-slider-handle ui-state-default ui-corner-all\" [ngStyle]=\"{'left':handleValues[1] + '%'}\"></span>\n        </div>\n    ",
-                    providers: [SLIDER_VALUE_ACCESSOR, DomHandler]
-                },] },
-    ];
-    /** @nocollapse */
-    Slider.ctorParameters = [
-        { type: ElementRef, },
-        { type: DomHandler, },
-        { type: Renderer, },
-    ];
-    Slider.propDecorators = {
-        'animate': [{ type: Input },],
-        'disabled': [{ type: Input },],
-        'min': [{ type: Input },],
-        'max': [{ type: Input },],
-        'orientation': [{ type: Input },],
-        'step': [{ type: Input },],
-        'range': [{ type: Input },],
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-        'onChange': [{ type: Output },],
-        'onSlideEnd': [{ type: Output },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], Slider.prototype, "animate", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], Slider.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], Slider.prototype, "min", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], Slider.prototype, "max", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], Slider.prototype, "orientation", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], Slider.prototype, "step", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], Slider.prototype, "range", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], Slider.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], Slider.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], Slider.prototype, "onChange", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], Slider.prototype, "onSlideEnd", void 0);
+    Slider = __decorate([
+        core_1.Component({
+            selector: 'p-slider',
+            template: "\n        <div [ngStyle]=\"style\" [class]=\"styleClass\" [ngClass]=\"{'ui-slider ui-widget ui-widget-content ui-corner-all':true,\n            'ui-slider-horizontal':orientation == 'horizontal','ui-slider-vertical':orientation == 'vertical','ui-slider-animate':animate}\"\n            (click)=\"onBarClick($event)\">\n            <span *ngIf=\"!range\" class=\"ui-slider-handle ui-state-default ui-corner-all\" (mousedown)=\"onMouseDown($event)\" [style.transition]=\"dragging ? 'none': null\"\n                [ngStyle]=\"{'left': orientation == 'horizontal' ? handleValue + '%' : null,'bottom': orientation == 'vertical' ? handleValue + '%' : null}\"></span>\n            <span *ngIf=\"range\" class=\"ui-slider-range ui-widget-header ui-corner-all\" [ngStyle]=\"{'left':handleValues[0] + '%',width: (handleValues[1] - handleValues[0] + '%')}\"></span>\n            <span *ngIf=\"orientation=='vertical'\" class=\"ui-slider-range ui-slider-range-min ui-widget-header ui-corner-all\" [ngStyle]=\"{'height': handleValue + '%'}\"></span>\n            <span *ngIf=\"range\" (mousedown)=\"onMouseDown($event,0)\" [style.transition]=\"dragging ? 'none': null\" class=\"ui-slider-handle ui-state-default ui-corner-all\" [ngStyle]=\"{'left':handleValues[0] + '%'}\"></span>\n            <span *ngIf=\"range\" (mousedown)=\"onMouseDown($event,1)\" [style.transition]=\"dragging ? 'none': null\" class=\"ui-slider-handle ui-state-default ui-corner-all\" [ngStyle]=\"{'left':handleValues[1] + '%'}\"></span>\n        </div>\n    ",
+            providers: [exports.SLIDER_VALUE_ACCESSOR, domhandler_1.DomHandler]
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, domhandler_1.DomHandler, core_1.Renderer])
+    ], Slider);
     return Slider;
 }());
-export var SliderModule = (function () {
+exports.Slider = Slider;
+var SliderModule = (function () {
     function SliderModule() {
     }
-    SliderModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [Slider],
-                    declarations: [Slider]
-                },] },
-    ];
-    /** @nocollapse */
-    SliderModule.ctorParameters = [];
+    SliderModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [Slider],
+            declarations: [Slider]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SliderModule);
     return SliderModule;
 }());
+exports.SliderModule = SliderModule;
 //# sourceMappingURL=slider.js.map

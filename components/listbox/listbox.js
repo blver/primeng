@@ -1,19 +1,29 @@
-import { NgModule, Component, ElementRef, Input, Output, EventEmitter, ContentChild, TemplateRef, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SharedModule } from '../common/shared';
-import { DomHandler } from '../dom/domhandler';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-export var LISTBOX_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return Listbox; }),
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var shared_1 = require('../common/shared');
+var domhandler_1 = require('../dom/domhandler');
+var forms_1 = require('@angular/forms');
+exports.LISTBOX_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return Listbox; }),
     multi: true
 };
-export var Listbox = (function () {
+var Listbox = (function () {
     function Listbox(el, domHandler) {
         this.el = el;
         this.domHandler = domHandler;
-        this.onChange = new EventEmitter();
-        this.onDblClick = new EventEmitter();
+        this.onChange = new core_1.EventEmitter();
+        this.onDblClick = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
@@ -115,42 +125,61 @@ export var Listbox = (function () {
             value: option
         });
     };
-    Listbox.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-listbox',
-                    template: "\n        <div [ngClass]=\"{'ui-listbox ui-inputtext ui-widget ui-widget-content ui-corner-all':true,'ui-state-disabled':disabled}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <ul class=\"ui-listbox-list\">\n                <li #item *ngFor=\"let option of options\"\n                    [ngClass]=\"{'ui-listbox-item ui-corner-all':true,'ui-state-hover':(hoveredItem==item),'ui-state-highlight':isSelected(option)}\"\n                    (mouseenter)=\"hoveredItem=item\" (mouseleave)=\"hoveredItem=null\" (click)=\"onOptionClick($event,option)\" (dblclick)=\"onDoubleClick($event,option)\">\n                    <span *ngIf=\"!itemTemplate\">{{option.label}}</span>\n                    <template *ngIf=\"itemTemplate\" [pTemplateWrapper]=\"itemTemplate\" [item]=\"option\"></template>\n                </li>\n            </ul>\n        </div>\n    ",
-                    providers: [DomHandler, LISTBOX_VALUE_ACCESSOR]
-                },] },
-    ];
-    /** @nocollapse */
-    Listbox.ctorParameters = [
-        { type: ElementRef, },
-        { type: DomHandler, },
-    ];
-    Listbox.propDecorators = {
-        'options': [{ type: Input },],
-        'multiple': [{ type: Input },],
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-        'disabled': [{ type: Input },],
-        'onChange': [{ type: Output },],
-        'onDblClick': [{ type: Output },],
-        'itemTemplate': [{ type: ContentChild, args: [TemplateRef,] },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Array)
+    ], Listbox.prototype, "options", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], Listbox.prototype, "multiple", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], Listbox.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], Listbox.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], Listbox.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], Listbox.prototype, "onChange", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], Listbox.prototype, "onDblClick", void 0);
+    __decorate([
+        core_1.ContentChild(core_1.TemplateRef), 
+        __metadata('design:type', core_1.TemplateRef)
+    ], Listbox.prototype, "itemTemplate", void 0);
+    Listbox = __decorate([
+        core_1.Component({
+            selector: 'p-listbox',
+            template: "\n        <div [ngClass]=\"{'ui-listbox ui-inputtext ui-widget ui-widget-content ui-corner-all':true,'ui-state-disabled':disabled}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <ul class=\"ui-listbox-list\">\n                <li #item *ngFor=\"let option of options\"\n                    [ngClass]=\"{'ui-listbox-item ui-corner-all':true,'ui-state-hover':(hoveredItem==item),'ui-state-highlight':isSelected(option)}\"\n                    (mouseenter)=\"hoveredItem=item\" (mouseleave)=\"hoveredItem=null\" (click)=\"onOptionClick($event,option)\" (dblclick)=\"onDoubleClick($event,option)\">\n                    <span *ngIf=\"!itemTemplate\">{{option.label}}</span>\n                    <template *ngIf=\"itemTemplate\" [pTemplateWrapper]=\"itemTemplate\" [item]=\"option\"></template>\n                </li>\n            </ul>\n        </div>\n    ",
+            providers: [domhandler_1.DomHandler, exports.LISTBOX_VALUE_ACCESSOR]
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, domhandler_1.DomHandler])
+    ], Listbox);
     return Listbox;
 }());
-export var ListboxModule = (function () {
+exports.Listbox = Listbox;
+var ListboxModule = (function () {
     function ListboxModule() {
     }
-    ListboxModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule, SharedModule],
-                    exports: [Listbox, SharedModule],
-                    declarations: [Listbox]
-                },] },
-    ];
-    /** @nocollapse */
-    ListboxModule.ctorParameters = [];
+    ListboxModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule, shared_1.SharedModule],
+            exports: [Listbox, shared_1.SharedModule],
+            declarations: [Listbox]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ListboxModule);
     return ListboxModule;
 }());
+exports.ListboxModule = ListboxModule;
 //# sourceMappingURL=listbox.js.map

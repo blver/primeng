@@ -18,7 +18,7 @@ export class Button implements AfterViewInit, OnDestroy {
 
     @Input() iconPos: string = 'left';
         
-    public _label: string;
+    protected _label: string;
     
     public hover: boolean;
     
@@ -26,9 +26,9 @@ export class Button implements AfterViewInit, OnDestroy {
     
     public active: boolean;
     
-    public initialized: boolean;
+    protected initialized: boolean;
 
-    constructor(public el: ElementRef, public domHandler: DomHandler) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler) {}
     
     ngAfterViewInit() {
         this.domHandler.addMultipleClasses(this.el.nativeElement, this.getStyleClass());
@@ -47,33 +47,33 @@ export class Button implements AfterViewInit, OnDestroy {
     }
         
     @HostListener('mouseenter', ['$event']) 
-    onMouseenter(e: Event) {
+    onMouseenter(e) {
         this.hover = true;
     }
     
     @HostListener('mouseleave', ['$event']) 
-    onMouseleave(e: Event) {
+    onMouseleave(e) {
         this.hover = false;
         this.active = false;
     }
     
     @HostListener('mousedown', ['$event']) 
-    onMouseDown(e: Event) {
+    onMouseDown(e) {
         this.active = true;
     }
     
     @HostListener('mouseup', ['$event']) 
-    onMouseUp(e: Event) {
+    onMouseUp(e) {
         this.active = false;
     }
     
     @HostListener('focus', ['$event']) 
-    onFocus(e: Event) {
+    onFocus(e) {
         this.focus = true;
     }
     
     @HostListener('blur', ['$event']) 
-    onBlur(e: Event) {
+    onBlur(e) {
         this.focus = false;
     }
     

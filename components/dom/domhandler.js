@@ -1,5 +1,15 @@
-import { Injectable } from '@angular/core';
-export var DomHandler = (function () {
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var DomHandler = (function () {
     function DomHandler() {
     }
     DomHandler.prototype.addClass = function (element, className) {
@@ -61,13 +71,12 @@ export var DomHandler = (function () {
         var targetHeight = target.offsetHeight;
         var targetWidth = target.offsetWidth;
         var targetOffset = target.getBoundingClientRect();
-        var viewport = this.getViewport();
         var top, left;
-        if ((targetOffset.top + targetHeight + elementDimensions.height) > viewport.height)
+        if ((targetOffset.top + targetHeight + elementDimensions.height) > window.innerHeight)
             top = -1 * (elementDimensions.height);
         else
             top = targetHeight;
-        if ((targetOffset.left + elementDimensions.width) > viewport.width)
+        if ((targetOffset.left + elementDimensions.width) > window.innerWidth)
             left = targetWidth - elementDimensions.width;
         else
             left = 0;
@@ -83,13 +92,12 @@ export var DomHandler = (function () {
         var targetOffset = target.getBoundingClientRect();
         var windowScrollTop = this.getWindowScrollTop();
         var windowScrollLeft = this.getWindowScrollLeft();
-        var viewport = this.getViewport();
         var top, left;
-        if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height)
+        if (targetOffset.top + targetOuterHeight + elementOuterHeight > window.innerHeight)
             top = targetOffset.top + windowScrollTop - elementOuterHeight;
         else
             top = targetOuterHeight + targetOffset.top + windowScrollTop;
-        if (targetOffset.left + targetOuterWidth + elementOuterWidth > viewport.width)
+        if (targetOffset.left + targetOuterWidth + elementOuterWidth > window.innerWidth)
             left = targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth;
         else
             left = targetOffset.left + windowScrollLeft;
@@ -181,13 +189,9 @@ export var DomHandler = (function () {
         var width = el.offsetWidth;
         if (margin) {
             var style = getComputedStyle(el);
-            width += parseInt(style.marginLeft) + parseInt(style.marginRight);
+            width += parseInt(style.paddingLeft) + parseInt(style.paddingRight);
         }
         return width;
-    };
-    DomHandler.prototype.getHorizontalPadding = function (el) {
-        var style = getComputedStyle(el);
-        return parseInt(style.paddingLeft) + parseInt(style.paddingRight);
     };
     DomHandler.prototype.getHorizontalMargin = function (el) {
         var style = getComputedStyle(el);
@@ -244,7 +248,7 @@ export var DomHandler = (function () {
                 }
                 switch (typeof (obj1[p])) {
                     case 'object':
-                        if (obj1[p] && obj1[p]._$visited || !this.equals(obj1[p], obj2[p]))
+                        if (obj1._$visited || !this.equals(obj1[p], obj2[p]))
                             return false;
                         break;
                     case 'function':
@@ -270,11 +274,11 @@ export var DomHandler = (function () {
         return navigator.userAgent;
     };
     DomHandler.zindex = 1000;
-    DomHandler.decorators = [
-        { type: Injectable },
-    ];
-    /** @nocollapse */
-    DomHandler.ctorParameters = [];
+    DomHandler = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [])
+    ], DomHandler);
     return DomHandler;
 }());
+exports.DomHandler = DomHandler;
 //# sourceMappingURL=domhandler.js.map

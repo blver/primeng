@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 
 export class BasePanelMenuItem {
     
-    constructor(public router: Router) {}
+    constructor(protected router: Router) {}
     
     handleClick(event, item) {
         if(item.disabled) {
@@ -112,7 +112,7 @@ export class PanelMenu extends BasePanelMenuItem {
 
     @Input() styleClass: string;
     
-    public animating: boolean;
+    protected animating: boolean;
     
     constructor(router: Router) {
         super(router);

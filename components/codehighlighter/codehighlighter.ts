@@ -8,7 +8,7 @@ declare var Prism: any;
 })
 export class CodeHighlighter implements OnInit {
         
-    constructor(public el: ElementRef) {}
+    constructor(protected el: ElementRef) {}
     
     ngOnInit() {
         Prism.highlightElement(this.el.nativeElement);

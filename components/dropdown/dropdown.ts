@@ -23,11 +23,11 @@ export const DROPDOWN_VALUE_ACCESSOR: any = {
                 </select>
             </div>
             <div class="ui-helper-hidden-accessible">
-                <input #in type="text" readonly (focus)="onInputFocus($event)" (blur)="onInputBlur($event)" (keydown)="onKeydown($event)">
+                <input #in type="text" readonly (focus)="onFocus($event)" (blur)="onBlur($event)" (keydown)="onKeydown($event)">
             </div>
             <label [ngClass]="{'ui-dropdown-label ui-inputtext ui-corner-all':true,'ui-dropdown-label-empty':!label}" *ngIf="!editable">{{label||'empty'}}</label>
             <input type="text" class="ui-dropdown-label ui-inputtext ui-corner-all" *ngIf="editable" [value]="label"
-                        (click)="onEditableInputClick($event)" (input)="onEditableInputChange($event)" (focus)="onEditableInputFocus($event)" (blur)="onBlur($event)">
+                        (click)="onInputClick($event)" (input)="onInputChange($event)" (focus)="hide()">
             <div class="ui-dropdown-trigger ui-state-default ui-corner-right" [ngClass]="{'ui-state-hover':hover&&!disabled,'ui-state-focus':focus}">
                 <span class="fa fa-fw fa-caret-down ui-c"></span>
             </div>
@@ -56,6 +56,8 @@ export class Dropdown implements OnInit,AfterViewInit,AfterViewChecked,DoCheck,O
 
     @Input() options: SelectItem[];
 
+    @Output() onChange: EventEmitter<any> = new EventEmitter();
+
     @Input() scrollHeight: string = '200px';
 
     @Input() filter: boolean;
@@ -74,15 +76,9 @@ export class Dropdown implements OnInit,AfterViewInit,AfterViewChecked,DoCheck,O
     
     @Input() appendTo: any;
     
-    @Output() onChange: EventEmitter<any> = new EventEmitter();
-    
-    @Output() onFocus: EventEmitter<any> = new EventEmitter();
-    
-    @Output() onBlur: EventEmitter<any> = new EventEmitter();
-    
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<any>;
 
-    constructor(public el: ElementRef, public domHandler: DomHandler, public renderer: Renderer, differs: IterableDiffers) {
+    constructor(protected el: ElementRef, protected domHandler: DomHandler, protected renderer: Renderer, differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
     }
         
@@ -104,25 +100,25 @@ export class Dropdown implements OnInit,AfterViewInit,AfterViewChecked,DoCheck,O
     
     public panelVisible: boolean = false;
     
-    public documentClickListener: any;
+    protected documentClickListener: any;
     
-    public optionsChanged: boolean;
+    protected optionsChanged: boolean;
         
-    public panel: any;
+    protected panel: any;
     
-    public container: any;
+    protected container: any;
     
-    public itemsWrapper: any;
+    protected itemsWrapper: any;
     
-    public initialized: boolean;
+    protected initialized: boolean;
     
-    public selfClick: boolean;
+    protected selfClick: boolean;
     
-    public itemClick: boolean;
+    protected itemClick: boolean;
     
-    public hoveredItem: any;
+    protected hoveredItem: any;
     
-    public selectedOptionUpdated: boolean;
+    protected selectedOptionUpdated: boolean;
             
     ngOnInit() {
         this.optionsToDisplay = this.options;
@@ -260,16 +256,11 @@ export class Dropdown implements OnInit,AfterViewInit,AfterViewChecked,DoCheck,O
         }
     }
     
-    onEditableInputClick(event) {
+    onInputClick(event) {
         this.itemClick = true;
     }
     
-    onEditableInputFocus(event) {
-        this.focus = true;
-        this.hide();
-    }
-    
-    onEditableInputChange(event) {
+    onInputChange(event) {
         this.value = event.target.value;
         this.updateSelectedOption(this.value);                
         this.onModelChange(this.value);
@@ -292,19 +283,17 @@ export class Dropdown implements OnInit,AfterViewInit,AfterViewChecked,DoCheck,O
         this.panelVisible = false;
     }
     
-    onInputFocus(event) {
+    onFocus(event) {
         this.focus = true;
-        this.onFocus.emit(event);
     }
     
-    onInputBlur(event) {
+    onBlur(event) {
         this.focus = false;
         this.onModelTouched();
-        this.onBlur.emit(event);
     }
     
     onKeydown(event) {
-        let selectedItemIndex = this.selectedOption ? this.findOptionIndex(this.selectedOption.value, this.optionsToDisplay) : -1;
+        let selectedItemIndex = this.findOptionIndex(this.selectedOption.value, this.optionsToDisplay);
 
         switch(event.which) {
             //down
@@ -395,7 +384,7 @@ export class Dropdown implements OnInit,AfterViewInit,AfterViewChecked,DoCheck,O
             this.optionsToDisplay = [];
             for(let i = 0; i < this.options.length; i++) {
                 let option = this.options[i];
-                if(option.label.toLowerCase().indexOf(val) > -1) {
+                if(option.label.toLowerCase().startsWith(val)) {
                     this.optionsToDisplay.push(option);
                 }
             }
@@ -412,11 +401,8 @@ export class Dropdown implements OnInit,AfterViewInit,AfterViewChecked,DoCheck,O
     }
     
     ngOnDestroy() {
+        this.documentClickListener();
         this.initialized = false;
-        
-        if(this.documentClickListener) {
-            this.documentClickListener();
-        }
         
         if(this.appendTo) {
             this.el.nativeElement.appendChild(this.container);

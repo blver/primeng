@@ -43,10 +43,6 @@ export const INPUTMASK_VALUE_ACCESSOR: any = {
         [attr.size]="size" [attr.maxlength]="maxlength" [attr.tabindex]="tabindex" [disabled]="disabled" [readonly]="readonly"
         (focus)="onFocus($event)" (blur)="onBlur($event)" (keydown)="onKeyDown($event)" (keypress)="onKeyPress($event)"
         (input)="onInput($event)" (paste)="handleInputChange($event)">`,
-    host: {
-        '[class.ui-inputwrapper-filled]': 'filled',
-        '[class.ui-inputwrapper-focus]': 'focus'
-    },
     providers: [INPUTMASK_VALUE_ACCESSOR,DomHandler]
 })
 export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
@@ -110,10 +106,8 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
     caretTimeoutId: any;
     
     androidChrome: boolean;
-    
-    focus: boolean;
             
-    constructor(public el: ElementRef, public domHandler: DomHandler) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler) {}
         
     ngAfterViewInit() {
         this.input = this.el.nativeElement.children[0];
@@ -226,15 +220,13 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
         }
     }
     
-    isCompleted(): boolean {
-        let completed: boolean;
+    tryFireCompleted() {
         for (let i = this.firstNonMaskPos; i <= this.lastRequiredNonMaskPos; i++) {
             if (this.tests[i] && this.buffer[i] === this.getPlaceholder(i)) {
-                return false;
+                return;
             }
         }
-        
-        return true;
+        this.onComplete.emit();
     }
     
     getPlaceholder(i: number) {
@@ -316,13 +308,10 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
             this.caret(pos.begin,pos.begin);
         }
 
-        if(this.isCompleted()) {
-            this.onComplete.emit();
-        }
+        this.tryFireCompleted();
     }
     
     onBlur(e) {
-        this.focus = false;
         this.onModelTouched();
         this.checkVal();
         this.updateModel(e);
@@ -383,8 +372,7 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
             pos = this.caret(),
             p,
             c,
-            next,
-            completed;
+            next;
 
         if (e.ctrlKey || e.altKey || e.metaKey || k < 32) {//Ignore
             return;
@@ -415,7 +403,7 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
                         this.caret(next);
                     }
                     if(pos.begin <= this.lastRequiredNonMaskPos){
-                         completed = this.isCompleted();
+                         this.tryFireCompleted();
                      }
                 }
             }
@@ -423,10 +411,6 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
         }
         
         this.updateModel(e);
-        
-        if(completed) {
-            this.onComplete.emit();
-        }
     }
     
     clearBuffer(start, end) {
@@ -498,8 +482,6 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
         if (this.readonly){
             return;
         }
-        
-        this.focus = true;
 
         clearTimeout(this.caretTimeoutId);
         let pos;
@@ -521,7 +503,7 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
         }, 10);
     }
     
-    onInput(event) {         
+    onInput(event) { 
         if (this.androidChrome)
             this.handleAndroidInput(event);
         else
@@ -533,13 +515,10 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
             return;
         }
 
-        setTimeout(() => {
-            var pos = this.checkVal(true);
+        setTimeout(function() {
+            var pos=this.checkVal(true);
             this.caret(pos);
-            this.updateModel(event);
-            if(this.isCompleted()) {
-                this.onComplete.emit();
-            }
+            this.tryFireCompleted();
         }, 0);
     }
     
@@ -553,10 +532,6 @@ export class InputMask implements AfterViewInit,OnDestroy,ControlValueAccessor {
         }
         
         return unmaskedBuffer.join('');
-    }
-    
-    get filled(): boolean {
-        return this.input && this.input.value != '';
     }
     
     updateModel(e) {

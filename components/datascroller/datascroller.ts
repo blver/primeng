@@ -56,7 +56,7 @@ export class DataScroller implements AfterViewInit,DoCheck,OnDestroy {
 
     public dataToRender: any[] = [];
 
-    public first: number = 0;
+    protected first: number = 0;
     
     differ: any;
     
@@ -64,7 +64,7 @@ export class DataScroller implements AfterViewInit,DoCheck,OnDestroy {
     
     contentElement: any;
 
-    constructor(public el: ElementRef, differs: IterableDiffers, public renderer: Renderer, public domHandler: DomHandler) {
+    constructor(protected el: ElementRef, differs: IterableDiffers, protected renderer: Renderer, protected domHandler: DomHandler) {
         this.differ = differs.find([]).create(null);
     }
 
@@ -111,12 +111,6 @@ export class DataScroller implements AfterViewInit,DoCheck,OnDestroy {
             }
         }
         this.first = this.first + this.rows;
-    }
-     
-    reset() {
-        this.first = 0;
-        this.dataToRender = [];
-        this.load();
     }
 
     isEmpty() {

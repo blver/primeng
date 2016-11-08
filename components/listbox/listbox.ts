@@ -55,7 +55,7 @@ export class Listbox implements ControlValueAccessor {
     
     hoveredItem: any;
         
-    constructor(public el: ElementRef, public domHandler: DomHandler) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler) {}
     
     writeValue(value: any) : void {
         this.value = value;

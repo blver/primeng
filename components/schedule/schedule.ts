@@ -1,7 +1,6 @@
 import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,DoCheck,Input,Output,EventEmitter,IterableDiffers} from '@angular/core';
 import {CommonModule} from '@angular/common';
-
-declare var jQuery: any;
+import * as jQuery from 'jquery';
 
 @Component({
     selector: 'p-schedule',
@@ -83,8 +82,6 @@ export class Schedule implements AfterViewInit,DoCheck,OnDestroy {
 
     @Input() eventRender: Function;
     
-    @Input() dayRender: Function;
-    
     @Output() onDayClick: EventEmitter<any> = new EventEmitter();
     
     @Output() onEventClick: EventEmitter<any> = new EventEmitter();
@@ -115,7 +112,7 @@ export class Schedule implements AfterViewInit,DoCheck,OnDestroy {
     
     schedule: any;
 
-    constructor(public el: ElementRef, differs: IterableDiffers) {
+    constructor(protected el: ElementRef, differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
         this.initialized = false;
     }
@@ -156,7 +153,6 @@ export class Schedule implements AfterViewInit,DoCheck,OnDestroy {
             eventOverlap: this.eventOverlap,
             eventConstraint: this.eventConstraint,
             eventRender: this.eventRender,
-            dayRender: this.dayRender,
             events: (start, end, timezone, callback) => {
                 callback(this.events);
             },
@@ -261,7 +257,7 @@ export class Schedule implements AfterViewInit,DoCheck,OnDestroy {
     }
 
     ngOnDestroy() {
-        jQuery(this.el.nativeElement.children[0]).fullCalendar('destroy');
+        (jQuery(this.el.nativeElement.children[0]) as any ).fullCalendar('destroy');
         this.initialized = false;
         this.schedule = null;
     }

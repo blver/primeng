@@ -1,15 +1,25 @@
-import { NgModule, Component, ElementRef, Input, Output, EventEmitter, IterableDiffers, ChangeDetectorRef, NgZone } from '@angular/core';
-import { CommonModule } from '@angular/common';
-export var GMap = (function () {
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var GMap = (function () {
     function GMap(el, differs, cd, zone) {
         this.el = el;
         this.cd = cd;
         this.zone = zone;
-        this.onMapClick = new EventEmitter();
-        this.onOverlayClick = new EventEmitter();
-        this.onOverlayDragStart = new EventEmitter();
-        this.onOverlayDrag = new EventEmitter();
-        this.onOverlayDragEnd = new EventEmitter();
+        this.onMapClick = new core_1.EventEmitter();
+        this.onOverlayClick = new core_1.EventEmitter();
+        this.onOverlayDragStart = new core_1.EventEmitter();
+        this.onOverlayDrag = new core_1.EventEmitter();
+        this.onOverlayDragEnd = new core_1.EventEmitter();
         this.differ = differs.find([]).create(null);
     }
     GMap.prototype.ngAfterViewInit = function () {
@@ -98,44 +108,64 @@ export var GMap = (function () {
     GMap.prototype.getMap = function () {
         return this.map;
     };
-    GMap.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-gmap',
-                    template: "<div [ngStyle]=\"style\" [class]=\"styleClass\"></div>"
-                },] },
-    ];
-    /** @nocollapse */
-    GMap.ctorParameters = [
-        { type: ElementRef, },
-        { type: IterableDiffers, },
-        { type: ChangeDetectorRef, },
-        { type: NgZone, },
-    ];
-    GMap.propDecorators = {
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-        'options': [{ type: Input },],
-        'overlays': [{ type: Input },],
-        'onMapClick': [{ type: Output },],
-        'onOverlayClick': [{ type: Output },],
-        'onOverlayDragStart': [{ type: Output },],
-        'onOverlayDrag': [{ type: Output },],
-        'onOverlayDragEnd': [{ type: Output },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], GMap.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], GMap.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], GMap.prototype, "options", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Array)
+    ], GMap.prototype, "overlays", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], GMap.prototype, "onMapClick", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], GMap.prototype, "onOverlayClick", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], GMap.prototype, "onOverlayDragStart", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], GMap.prototype, "onOverlayDrag", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], GMap.prototype, "onOverlayDragEnd", void 0);
+    GMap = __decorate([
+        core_1.Component({
+            selector: 'p-gmap',
+            template: "<div [ngStyle]=\"style\" [class]=\"styleClass\"></div>"
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, core_1.IterableDiffers, core_1.ChangeDetectorRef, core_1.NgZone])
+    ], GMap);
     return GMap;
 }());
-export var GMapModule = (function () {
+exports.GMap = GMap;
+var GMapModule = (function () {
     function GMapModule() {
     }
-    GMapModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [GMap],
-                    declarations: [GMap]
-                },] },
-    ];
-    /** @nocollapse */
-    GMapModule.ctorParameters = [];
+    GMapModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [GMap],
+            declarations: [GMap]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], GMapModule);
     return GMapModule;
 }());
+exports.GMapModule = GMapModule;
 //# sourceMappingURL=gmap.js.map

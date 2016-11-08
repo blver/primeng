@@ -78,13 +78,13 @@ export class SplitButton implements OnInit,OnDestroy {
     
     public activeDropdown: boolean;
     
-    public hoveredItem: any;
+    protected hoveredItem: any;
     
     public menuVisible: boolean = false;
     
-    public documentClickListener: any;
+    protected documentClickListener: any;
 
-    constructor(public el: ElementRef, public domHandler: DomHandler, public renderer: Renderer, public router: Router) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler, protected renderer: Renderer, protected router: Router) {}
     
     ngOnInit() {
         this.documentClickListener = this.renderer.listenGlobal('body', 'click', () => {
@@ -92,11 +92,11 @@ export class SplitButton implements OnInit,OnDestroy {
         });
     }
     
-    onDefaultButtonClick(event: Event) {
+    onDefaultButtonClick(event) {
         this.onClick.emit(event);
     }
     
-    itemClick(event: Event, item: MenuItem) {
+    itemClick(event, item: MenuItem) {
         if(item.disabled) {
             event.preventDefault();
             return;
@@ -122,7 +122,7 @@ export class SplitButton implements OnInit,OnDestroy {
         }
     }
     
-    onDropdownClick(event: Event, menu: Element, container: Element) {
+    onDropdownClick(event, menu, container) {
         this.menuVisible= !this.menuVisible;
         this.domHandler.relativePosition(menu, container);
         this.domHandler.fadeIn(menu,25);

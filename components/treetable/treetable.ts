@@ -8,7 +8,7 @@ import {DomHandler} from '../dom/domhandler';
 @Component({
     selector: '[pTreeRow]',
     template: `
-        <div class="ui-treetable-row" [ngClass]="{'ui-state-hover':hover&&treeTable.selectionMode,'ui-state-highlight':isSelected()}">
+        <div class="ui-treetable-row" [ngClass]="{'ui-state-hover':hover&&treeTable.selectionMode,'ui-state-highlight':isSelected(node)}">
             <td *ngFor="let col of treeTable.columns; let i=index" [ngStyle]="col.style" [class]="col.styleClass"
                 (mouseenter)="hover=true" (mouseleave)="hover=false" (click)="onRowClick($event)">
                 <span *ngIf="i==0" class="ui-treetable-toggler fa fa-fw ui-c" [ngClass]="{'fa-caret-down':node.expanded,'fa-caret-right':!node.expanded}"
@@ -33,11 +33,11 @@ export class UITreeRow {
     
     @Input() level: number = 0;
             
-    public hover: boolean;
+    hover: boolean;
     
     constructor(@Inject(forwardRef(() => TreeTable)) public treeTable:TreeTable) {}
     
-    toggle(event: Event) {
+    toggle(event) {
         if(this.node.expanded)
             this.treeTable.onNodeCollapse.emit({originalEvent: event, node: this.node});
         else
@@ -50,11 +50,11 @@ export class UITreeRow {
         return this.node.leaf == false ? false : !(this.node.children&&this.node.children.length);
     }
     
-    isSelected() {
+    isSelected(node) {
         return this.treeTable.isSelected(this.node);
     }
     
-    onRowClick(event: MouseEvent) {
+    onRowClick(event) {
         this.treeTable.onRowClick(event, this.node);
     }
     
@@ -139,15 +139,14 @@ export class TreeTable {
         
     @Input() styleClass: string;
     
-    @ContentChild(Header) header: Header;
+    @ContentChild(Header) header;
 
-    @ContentChild(Footer) footer: Footer;
+    @ContentChild(Footer) footer;
     
     @ContentChildren(Column) columns: QueryList<Column>;
         
-    onRowClick(event: MouseEvent, node: TreeNode) {
-        let eventTarget = (<Element> event.target);
-        if(eventTarget.className && eventTarget.className.indexOf('ui-treetable-toggler') === 0) {
+    onRowClick(event, node) {
+        if(event.target.className&&event.target.className.indexOf('ui-treetable-toggler') === 0) {
             return;
         }
         else {

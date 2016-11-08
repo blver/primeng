@@ -23,9 +23,9 @@ export class Draggable {
     
     @Output() onDrag: EventEmitter<any> = new EventEmitter();
     
-    public handle: any;
+    protected handle: any;
         
-    constructor(public el: ElementRef, public domHandler: DomHandler) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler) {}
     
     @HostListener('dragstart', ['$event']) 
     dragStart(event) {
@@ -77,7 +77,7 @@ export class Draggable {
 })
 export class Droppable {
     
-    @Input('pDroppable') scope: string|string[];
+    @Input('pDroppable') scope: string;
         
     @Input() dropEffect: string;
         
@@ -89,7 +89,7 @@ export class Droppable {
     
     @Output() onDragOver: EventEmitter<any> = new EventEmitter();
 
-    constructor(public el: ElementRef, public domHandler: DomHandler) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler) {}
             
     @HostListener('drop', ['$event'])
     drop(event) {
@@ -124,22 +124,17 @@ export class Droppable {
     }
     
     allowDrop(event): boolean {
+        let allow = false;
         let types = event.dataTransfer.types;
         if(types && types.length) {
             for(let i = 0; i < types.length; i++) {
-                if(typeof (this.scope) == "string" && types[i] == this.scope) {
-                    return true;
-                }
-                else if(this.scope instanceof Array) {
-                    for(let j = 0; j < this.scope.length; j++) {
-                        if(types[i] == this.scope[j]) {
-                            return true;
-                        }
-                    }
+                if(types[i] == this.scope) {
+                    allow = true;
+                    break;
                 }
             }
         }
-        return false;
+        return allow;
     }
 }
 

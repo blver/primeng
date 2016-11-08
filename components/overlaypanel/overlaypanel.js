@@ -1,16 +1,26 @@
-import { NgModule, Component, Input, Output, EventEmitter, Renderer, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DomHandler } from '../dom/domhandler';
-export var OverlayPanel = (function () {
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var domhandler_1 = require('../dom/domhandler');
+var OverlayPanel = (function () {
     function OverlayPanel(el, domHandler, renderer) {
         this.el = el;
         this.domHandler = domHandler;
         this.renderer = renderer;
         this.dismissable = true;
-        this.onBeforeShow = new EventEmitter();
-        this.onAfterShow = new EventEmitter();
-        this.onBeforeHide = new EventEmitter();
-        this.onAfterHide = new EventEmitter();
+        this.onBeforeShow = new core_1.EventEmitter();
+        this.onAfterShow = new core_1.EventEmitter();
+        this.onBeforeHide = new core_1.EventEmitter();
+        this.onAfterHide = new core_1.EventEmitter();
         this.visible = false;
     }
     OverlayPanel.prototype.ngOnInit = function () {
@@ -56,7 +66,7 @@ export var OverlayPanel = (function () {
         }
         this.onBeforeShow.emit(null);
         var elementTarget = target || event.currentTarget || event.target;
-        this.container.style.zIndex = ++DomHandler.zindex;
+        this.container.style.zIndex = ++domhandler_1.DomHandler.zindex;
         if (this.visible) {
             this.domHandler.absolutePosition(this.container, elementTarget);
         }
@@ -95,44 +105,65 @@ export var OverlayPanel = (function () {
         }
         this.target = null;
     };
-    OverlayPanel.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-overlayPanel',
-                    template: "\n        <div [ngClass]=\"'ui-overlaypanel ui-widget ui-widget-content ui-corner-all ui-shadow'\" [ngStyle]=\"style\" [class]=\"styleClass\"\n            [style.display]=\"visible ? 'block' : 'none'\" (click)=\"onPanelClick()\">\n            <div class=\"ui-overlaypanel-content\">\n                <ng-content></ng-content>\n            </div>\n            <a href=\"#\" *ngIf=\"showCloseIcon\" class=\"ui-overlaypanel-close ui-state-default\" [ngClass]=\"{'ui-state-hover':hoverCloseIcon}\"\n                (mouseenter)=\"hoverCloseIcon=true\" (mouseleave)=\"hoverCloseIcon=false\" (click)=\"onCloseClick($event)\"><span class=\"fa fa-fw fa-close\"></span></a>\n        </div>\n    ",
-                    providers: [DomHandler]
-                },] },
-    ];
-    /** @nocollapse */
-    OverlayPanel.ctorParameters = [
-        { type: ElementRef, },
-        { type: DomHandler, },
-        { type: Renderer, },
-    ];
-    OverlayPanel.propDecorators = {
-        'dismissable': [{ type: Input },],
-        'showCloseIcon': [{ type: Input },],
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-        'appendTo': [{ type: Input },],
-        'onBeforeShow': [{ type: Output },],
-        'onAfterShow': [{ type: Output },],
-        'onBeforeHide': [{ type: Output },],
-        'onAfterHide': [{ type: Output },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], OverlayPanel.prototype, "dismissable", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], OverlayPanel.prototype, "showCloseIcon", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], OverlayPanel.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], OverlayPanel.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], OverlayPanel.prototype, "appendTo", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], OverlayPanel.prototype, "onBeforeShow", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], OverlayPanel.prototype, "onAfterShow", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], OverlayPanel.prototype, "onBeforeHide", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], OverlayPanel.prototype, "onAfterHide", void 0);
+    OverlayPanel = __decorate([
+        core_1.Component({
+            selector: 'p-overlayPanel',
+            template: "\n        <div [ngClass]=\"'ui-overlaypanel ui-widget ui-widget-content ui-corner-all ui-shadow'\" [ngStyle]=\"style\" [class]=\"styleClass\"\n            [style.display]=\"visible ? 'block' : 'none'\" (click)=\"onPanelClick()\">\n            <div class=\"ui-overlaypanel-content\">\n                <ng-content></ng-content>\n            </div>\n            <a href=\"#\" *ngIf=\"showCloseIcon\" class=\"ui-overlaypanel-close ui-state-default\" [ngClass]=\"{'ui-state-hover':hoverCloseIcon}\"\n                (mouseenter)=\"hoverCloseIcon=true\" (mouseleave)=\"hoverCloseIcon=false\" (click)=\"onCloseClick($event)\"><span class=\"fa fa-fw fa-close\"></span></a>\n        </div>\n    ",
+            providers: [domhandler_1.DomHandler]
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, domhandler_1.DomHandler, core_1.Renderer])
+    ], OverlayPanel);
     return OverlayPanel;
 }());
-export var OverlayPanelModule = (function () {
+exports.OverlayPanel = OverlayPanel;
+var OverlayPanelModule = (function () {
     function OverlayPanelModule() {
     }
-    OverlayPanelModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [OverlayPanel],
-                    declarations: [OverlayPanel]
-                },] },
-    ];
-    /** @nocollapse */
-    OverlayPanelModule.ctorParameters = [];
+    OverlayPanelModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [OverlayPanel],
+            declarations: [OverlayPanel]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], OverlayPanelModule);
     return OverlayPanelModule;
 }());
+exports.OverlayPanelModule = OverlayPanelModule;
 //# sourceMappingURL=overlaypanel.js.map

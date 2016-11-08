@@ -1,14 +1,24 @@
-import { NgModule, Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-export var SELECTBUTTON_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return SelectButton; }),
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var forms_1 = require('@angular/forms');
+exports.SELECTBUTTON_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return SelectButton; }),
     multi: true
 };
-export var SelectButton = (function () {
+var SelectButton = (function () {
     function SelectButton() {
-        this.onChange = new EventEmitter();
+        this.onChange = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
@@ -62,38 +72,57 @@ export var SelectButton = (function () {
         }
         return index;
     };
-    SelectButton.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-selectButton',
-                    template: "\n        <div [ngClass]=\"'ui-selectbutton ui-buttonset ui-widget ui-corner-all ui-buttonset-' + options.length\" (mouseleave)=\"hoveredItem=null\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div *ngFor=\"let option of options;\" class=\"ui-button ui-widget ui-state-default ui-button-text-only\"\n                [ngClass]=\"{'ui-state-hover': (hoveredItem==option)&&!disabled,'ui-state-active':isSelected(option), 'ui-state-disabled':disabled}\"\n                (mouseenter)=\"hoveredItem=option\" (click)=\"onItemClick($event,option)\">\n                <span class=\"ui-button-text ui-c\">{{option.label}}</span>\n            </div>\n        </div>\n    ",
-                    providers: [SELECTBUTTON_VALUE_ACCESSOR]
-                },] },
-    ];
-    /** @nocollapse */
-    SelectButton.ctorParameters = [];
-    SelectButton.propDecorators = {
-        'options': [{ type: Input },],
-        'tabindex': [{ type: Input },],
-        'multiple': [{ type: Input },],
-        'style': [{ type: Input },],
-        'styleClass': [{ type: Input },],
-        'disabled': [{ type: Input },],
-        'onChange': [{ type: Output },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Array)
+    ], SelectButton.prototype, "options", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], SelectButton.prototype, "tabindex", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], SelectButton.prototype, "multiple", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], SelectButton.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], SelectButton.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], SelectButton.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], SelectButton.prototype, "onChange", void 0);
+    SelectButton = __decorate([
+        core_1.Component({
+            selector: 'p-selectButton',
+            template: "\n        <div [ngClass]=\"'ui-selectbutton ui-buttonset ui-widget ui-corner-all ui-buttonset-' + options.length\" (mouseleave)=\"hoveredItem=null\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div *ngFor=\"let option of options;\" class=\"ui-button ui-widget ui-state-default ui-button-text-only\"\n                [ngClass]=\"{'ui-state-hover': (hoveredItem==option)&&!disabled,'ui-state-active':isSelected(option), 'ui-state-disabled':disabled}\"\n                (mouseenter)=\"hoveredItem=option\" (click)=\"onItemClick($event,option)\">\n                <span class=\"ui-button-text ui-c\">{{option.label}}</span>\n            </div>\n        </div>\n    ",
+            providers: [exports.SELECTBUTTON_VALUE_ACCESSOR]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SelectButton);
     return SelectButton;
 }());
-export var SelectButtonModule = (function () {
+exports.SelectButton = SelectButton;
+var SelectButtonModule = (function () {
     function SelectButtonModule() {
     }
-    SelectButtonModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [SelectButton],
-                    declarations: [SelectButton]
-                },] },
-    ];
-    /** @nocollapse */
-    SelectButtonModule.ctorParameters = [];
+    SelectButtonModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [SelectButton],
+            declarations: [SelectButton]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SelectButtonModule);
     return SelectButtonModule;
 }());
+exports.SelectButtonModule = SelectButtonModule;
 //# sourceMappingURL=selectbutton.js.map

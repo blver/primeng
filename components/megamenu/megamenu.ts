@@ -63,7 +63,7 @@ export class MegaMenu implements OnDestroy {
     
     activeLink: any;
             
-    constructor(public el: ElementRef, public domHandler: DomHandler, public renderer: Renderer, public router: Router) {}
+    constructor(protected el: ElementRef, protected domHandler: DomHandler, protected renderer: Renderer, protected router: Router) {}
     
     onItemMouseEnter(event, item, menuitem: MenuItem) {
         if(menuitem.disabled) {

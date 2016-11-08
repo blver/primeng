@@ -1,9 +1,19 @@
-import { NgModule, Component, ElementRef, Input, Output, EventEmitter, IterableDiffers } from '@angular/core';
-import { CommonModule } from '@angular/common';
-export var UIChart = (function () {
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var common_1 = require('@angular/common');
+var UIChart = (function () {
     function UIChart(el, differs) {
         this.el = el;
-        this.onDataSelect = new EventEmitter();
+        this.onDataSelect = new core_1.EventEmitter();
         this.differ = differs.find([]).create(null);
     }
     UIChart.prototype.ngAfterViewInit = function () {
@@ -48,39 +58,52 @@ export var UIChart = (function () {
             this.chart = null;
         }
     };
-    UIChart.decorators = [
-        { type: Component, args: [{
-                    selector: 'p-chart',
-                    template: "\n        <div>\n            <canvas [attr.width]=\"width\" [attr.height]=\"height\" (click)=\"onCanvasClick($event)\"></canvas>\n        </div>\n    "
-                },] },
-    ];
-    /** @nocollapse */
-    UIChart.ctorParameters = [
-        { type: ElementRef, },
-        { type: IterableDiffers, },
-    ];
-    UIChart.propDecorators = {
-        'type': [{ type: Input },],
-        'data': [{ type: Input },],
-        'options': [{ type: Input },],
-        'width': [{ type: Input },],
-        'height': [{ type: Input },],
-        'onDataSelect': [{ type: Output },],
-    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], UIChart.prototype, "type", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], UIChart.prototype, "data", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], UIChart.prototype, "options", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], UIChart.prototype, "width", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], UIChart.prototype, "height", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', core_1.EventEmitter)
+    ], UIChart.prototype, "onDataSelect", void 0);
+    UIChart = __decorate([
+        core_1.Component({
+            selector: 'p-chart',
+            template: "\n        <div>\n            <canvas [attr.width]=\"width\" [attr.height]=\"height\" (click)=\"onCanvasClick($event)\"></canvas>\n        </div>\n    "
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef, core_1.IterableDiffers])
+    ], UIChart);
     return UIChart;
 }());
-export var ChartModule = (function () {
+exports.UIChart = UIChart;
+var ChartModule = (function () {
     function ChartModule() {
     }
-    ChartModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [CommonModule],
-                    exports: [UIChart],
-                    declarations: [UIChart]
-                },] },
-    ];
-    /** @nocollapse */
-    ChartModule.ctorParameters = [];
+    ChartModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [UIChart],
+            declarations: [UIChart]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ChartModule);
     return ChartModule;
 }());
+exports.ChartModule = ChartModule;
 //# sourceMappingURL=chart.js.map
