@@ -7,7 +7,7 @@ index.html
 upload.php
 
 # typescript
-#*.ts
+*.ts
 !*.d.ts
 
 # git
