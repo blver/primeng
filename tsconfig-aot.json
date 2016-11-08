@@ -9,10 +9,20 @@
     "removeComments": false,
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
-    "lib": ["dom","es6"]
+    "lib": ["dom","es6"],
+    "declaration": false,
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "types": [
+            "node",
+            "jquery",
+            "fullcalendar"
+        ]
   },
   "include": [
-    "components/**/*.ts"
+    "components/**/*.ts",
+    "primeng.ts"
   ],
   "angularCompilerOptions": {
    "genDir": "aot",
