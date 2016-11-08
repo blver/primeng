@@ -8,7 +8,7 @@ showcase/*.js
 showcase/demo/**/*.js
 showcase/setup/*.js
 showcase/theming/*.js
-*.map
+#*.map
 
 # production showcase bundle
 prod
